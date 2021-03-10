@@ -5,3 +5,4 @@ scripts/
 .idea/
 .venv/
 *.sqlite3
+.env

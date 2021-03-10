@@ -1,0 +1,7 @@
+venv/
+scripts/
+*.pyc
+*.pyo
+.idea/
+.venv/
+*.sqlite3

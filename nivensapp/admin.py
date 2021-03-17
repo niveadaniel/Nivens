@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Employee, Department, Situation
+from .models import Employee, Department, Situation, PointTime
 
 
 @admin.register(Employee)
@@ -18,3 +18,9 @@ class DepartmentAdmin(admin.ModelAdmin):
 class SituationAdmin(admin.ModelAdmin):
     list_display = ['id', 'description']
     search_fields = ('id', 'description')
+
+
+@admin.register(PointTime)
+class PointTimeAdmin(admin.ModelAdmin):
+    list_display = ['employee', 'day', 'start_time', 'finish_time']
+    search_fields = ('employee__name', 'day', 'start_time', 'finish_time')

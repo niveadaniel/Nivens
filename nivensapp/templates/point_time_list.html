@@ -1,0 +1,79 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block main %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}">
+<script type="text/javascript" src="{% static 'DataTables/datatables.min.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery.floatingscroll.css' %}">
+<script type="text/javascript" src="{% static 'jquery/jquery.floatingscroll.min.js' %}"></script>
+
+<style>
+
+    h2 {
+        text-align:center;
+        color: #696969;
+    }
+
+    .btn-primary {
+        float: right;
+        margin-top: 30px;
+    }
+
+</style>
+
+<br><br>
+<h2>{{employee.name}}</h2>
+<hr>
+<br>
+<div class="row">
+    <input type="hidden" value="{{employee.id}}" name="employee_id" id="employee_id">
+    <div class="col-sm-2">
+        <label class="control-label"><b>Ano</b></label>
+        <select class="selectpicker form-control" name="year" id="year" data-live-search="True">
+            {% for year in years %}
+                <option value="{{ year }}" {% if year == actual_year %} selected {% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-sm-2">
+        <label class="control-label"><b>Mês</b></label>
+        <select class="selectpicker form-control" name="month" id="month" data-live-search="True">
+            {% for month in MONTHS_CHOICES %}
+                <option value="{{ month.0 }}" {% if month.0 == actual_month %} selected {% endif %}>{{ month.1 }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-sm-8">
+        <a href="">
+            <button class="btn btn-primary" id="" type="button">Relatório</button>
+        </a>
+    </div>
+</div>
+<br><br><br>
+<div class="row">
+    <div class="col-sm-12 col-lg-12 col-md-12 col-xs-12">
+        <div class="scrollbar-table" id="table">
+            <table class="table table-borderless" id="data_table" style="padding: inherit;">
+                <thead class="thead">
+                    <tr>
+                        <th scope="col">Data</th>
+                        <th scope="col">Entrada</th>
+                        <th scope="col">Pausa</th>
+                        <th scope="col">Retorno</th>
+                        <th scope="col">Saída</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+
+<script src="{% static 'javascript/point_time_list.js' %}"></script>
+
+{% endblock %}

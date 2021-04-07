@@ -22,5 +22,5 @@ class SituationAdmin(admin.ModelAdmin):
 
 @admin.register(PointTime)
 class PointTimeAdmin(admin.ModelAdmin):
-    list_display = ['employee', 'day', 'start_time', 'finish_time']
-    search_fields = ('employee__name', 'day', 'start_time', 'finish_time')
+    list_display = ['employee', 'start_time', 'finish_time']
+    search_fields = ('employee__name', 'start_time', 'finish_time')

@@ -158,7 +158,7 @@ def create_data_table_point_time(point_time):
                 if point.back_time:
                     total_hour = point.back_time - point.start_time
                 elif point.break_time:
-                    total_hour =  point.break_time - point.start_time
+                    total_hour = point.break_time - point.start_time
 
             point_time_list.append(
                 [point.start_time.strftime('%d/%m'),

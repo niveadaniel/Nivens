@@ -78,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nivens',
-        'USER': 'root', # Colocar seu usuario local
-        'PASSWORD': '31516440', # Colocar sua senha local
+        'USER': 'admin', # Colocar seu usuario local
+        'PASSWORD': 'admin', # Colocar sua senha local
         'HOST': 'localhost', # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }

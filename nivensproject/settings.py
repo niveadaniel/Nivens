@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nivensapp',
-    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
-    
+        
 ]
 
 MIDDLEWARE = [

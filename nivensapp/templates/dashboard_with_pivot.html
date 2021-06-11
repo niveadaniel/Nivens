@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset='utf-8'>
+        <title> Relatório do funcionário</title>
+        <script src="https://cdn.flexmonster.com/flexmonster.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.flexmonster.com/demo.css">
+        <script>
+             function processData(dataset) {
+                 var result = []
+                 dataset = JSON.parse(dataset);
+                 dataset.forEach(item => result.push(item.fields));
+                 return result;
+             }
+             $.ajax({
+
+                                          
+                 url: $("#pivot-table-container").attr("data-url"),
+                 dataType: 'json',
+                 success: function(data) {
+                     new Flexmonster({
+                            container: "#pivot-table-container",
+                            componentFolder: "https://cdn.flexmonster.com/",
+                            width: "100%",
+                            height: 430,
+                            toolbar: true,
+                            report: {
+                                dataSource: {
+                                    type: "json",
+                                    data: processData(data)
+                                    },
+                                    slice: {}
+                                }
+                            });
+                    new Flexmonster({
+                            container: "#pivot-chart-container",
+                            componentFolder: "https://cdn.flexmonster.com/",
+                            width: "100%",
+                            height: 430,
+                            //toolbar: true,
+                            report: {
+                                dataSource: {
+                                    type: "json",
+                                    data: processData(data)
+                                    mapping: { # atualizar
+                                                                            
+                                        "product_category": {
+                                            "caption": "Product Category",
+                                            "type": "string"
+                                        },
+                                        "payment_method": {
+                                            "caption": "Payment Method",
+                                            "type": "string"
+                                        },
+                                        "shipping_cost": {
+                                            "caption": "Shipping Cost",
+                                            "type": "number"
+                                        },
+                                        "unit_price": {
+                                            "caption": "Unit Price",
+                                            "type": "number"
+                                        }
+}
+                                },
+                                slice: {},
+                                "options": {
+                                    "viewType": "charts",
+                                    "chart": {
+                                        "type": "pie"
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+
+        </script>
+
+
+   
+
+    </head>
+    <body>
+        <div id="pivot-table-container" data-url="{% url 'pivot_data' %}"></div>
+        <div id="pivot-chart-container"></div>
+
+    </body>
+
+</html>

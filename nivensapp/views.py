@@ -6,6 +6,7 @@ from django.shortcuts import render
 from .models import Department, Employee, Situation, PointTime
 from .choices import MONTHS
 from datetime import date, datetime
+from django.core import serializers
 
 
 def employee_list(request):
@@ -170,3 +171,9 @@ def create_data_table_point_time(point_time):
                  ]
             )
     return point_time_list
+   
+
+
+
+
+

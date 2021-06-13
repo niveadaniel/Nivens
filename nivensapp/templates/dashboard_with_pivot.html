@@ -1,91 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'header.html' %}
+{% load static %}
 
-    <head>
-        <meta charset='utf-8'>
-        <title> Relatório do funcionário</title>
-        <script src="https://cdn.flexmonster.com/flexmonster.js"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.flexmonster.com/demo.css">
-        <script>
-             function processData(dataset) {
-                 var result = []
-                 dataset = JSON.parse(dataset);
-                 dataset.forEach(item => result.push(item.fields));
-                 return result;
-             }
-             $.ajax({
+{% block grafico %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawChart);
 
-                                          
-                 url: $("#pivot-table-container").attr("data-url"),
-                 dataType: 'json',
-                 success: function(data) {
-                     new Flexmonster({
-                            container: "#pivot-table-container",
-                            componentFolder: "https://cdn.flexmonster.com/",
-                            width: "100%",
-                            height: 430,
-                            toolbar: true,
-                            report: {
-                                dataSource: {
-                                    type: "json",
-                                    data: processData(data)
-                                    },
-                                    slice: {}
-                                }
-                            });
-                    new Flexmonster({
-                            container: "#pivot-chart-container",
-                            componentFolder: "https://cdn.flexmonster.com/",
-                            width: "100%",
-                            height: 430,
-                            //toolbar: true,
-                            report: {
-                                dataSource: {
-                                    type: "json",
-                                    data: processData(data)
-                                    mapping: { # atualizar
-                                                                            
-                                        "product_category": {
-                                            "caption": "Product Category",
-                                            "type": "string"
-                                        },
-                                        "payment_method": {
-                                            "caption": "Payment Method",
-                                            "type": "string"
-                                        },
-                                        "shipping_cost": {
-                                            "caption": "Shipping Cost",
-                                            "type": "number"
-                                        },
-                                        "unit_price": {
-                                            "caption": "Unit Price",
-                                            "type": "number"
-                                        }
-}
-                                },
-                                slice: {},
-                                "options": {
-                                    "viewType": "charts",
-                                    "chart": {
-                                        "type": "pie"
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses', 'Profit'],
+          ['2014', 1000, 400, 200],
+          ['2015', 1170, 460, 250],
+          ['2016', 660, 1120, 300],
+          ['2017', 1030, 540, 350]
+        ]);
 
-        </script>
+        var options = {
+          chart: {
+            title: 'Company Performance',
+            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+          }
+        };
 
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
 
-   
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
+    </script>
+    
+ 
 
-    </head>
-    <body>
-        <div id="pivot-table-container" data-url="{% url 'pivot_data' %}"></div>
-        <div id="pivot-chart-container"></div>
+{% endblock %}
 
-    </body>
-
-</html>
+{% block content %}
+<div id="columnchart_material" style="width: 800px; height: 500px;"></div>
+{%endblock%}

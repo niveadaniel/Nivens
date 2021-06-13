@@ -173,6 +173,10 @@ def create_data_table_point_time(point_time):
     return point_time_list
    
 
+def dashboard_with_pivot(request):
+    tipos = PointTime.objects.raw(
+        "select 1 as id, ponto.`day`, ponto.start_time from nivens.ponto group by employee_id;")
+    return render(request, 'templates/dashborad_with_pivot.html', {'tipos': tipos})
 
 
 

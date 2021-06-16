@@ -65,3 +65,17 @@ class PointTime(models.Model):
         db_table = 'ponto'
         verbose_name = 'Ponto'
         verbose_name_plural = 'Pontos'
+
+    class Report(models.Model):# refazer
+
+        employee = models.ForeignKey(Employee, on_delete=models.CASCADE,
+                                        blank=False, null=False)
+        day = models.DateField(auto_now_add=True, null=False,
+                            blank=False, editable=True)
+        start_time = models.DateTimeField(null=True, blank=True)
+        break_time = models.DateTimeField(null=True, blank=True)
+        back_time = models.DateTimeField(null=True, blank=True)
+        finish_time = models.DateTimeField(null=True, blank=True)
+
+        def __str__(self):
+            return str(self.employee.name) + ' - ' + str(self.day)

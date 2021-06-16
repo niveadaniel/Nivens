@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nivensapp',
+        
 ]
 
 MIDDLEWARE = [
@@ -79,13 +80,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nivens',
         'USER': 'root', # Colocar seu usuario local
-        'PASSWORD': '31516440', # Colocar sua senha local
+        'PASSWORD': 'sokurov.1', # Colocar sua senha local
         'HOST': 'localhost', # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
 
-
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 

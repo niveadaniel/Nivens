@@ -1,0 +1,135 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block main %}
+
+<script type="text/javascript" src="{% static 'jquery/jquery.mask.min.js' %}"></script>
+
+<style>
+    h2 {
+        text-align: center;
+        color: #696969;
+    }
+
+    .login-container{
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+    .login-form-1 {
+        padding: 7%;
+        box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 20px;
+    }
+    .login-form-1 {
+        text-align: center;
+    }
+    .login-container form{
+        padding: 10%;
+    }
+    .login-form-1 {
+        font-weight: 600;
+        opacity: 0.8;
+    }
+    .login-form-1 {
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .btn-outline-secondary {
+        float: right;
+        color: #696969;
+        border-color: #696969 !important;
+    }
+
+    label {
+        font-weight: bold;
+        color: #696969;
+        font-size: 17px;
+    }
+
+</style>
+
+<br><br>
+<h2>Funcionário</h2>
+
+<br><br>
+
+<div class="container ">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <form class="form col-md-12 save-employee-form" id="save-employee-form" action="{% url 'save_employee' %}" method="POST">{% csrf_token %}
+                        <input type="hidden" class="form-control" value="{% if employee %}{{ employee.id }}{% endif %}" id="id" name="id">
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-lg-6 col-md-6 col-xs-12">
+                                <label class="control-label" for="name">Nome</label>
+                                <input type="text" class="form-control form-control-sm" value="{% if employee %}{{ employee.name }}{% endif %}" id="name" name="name" required>
+                            </div>
+                            <div class="form-group col-sm-6 col-lg-6 col-md-6 col-xs-12">
+                                <label class="control-label" for="email">E-mail</label>
+                                <input type="text" class="form-control form-control-sm" value="{% if employee %}{{ employee.email }}{% endif %}" id="email" name="email" required>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-lg-4 col-md-4 col-xs-12">
+                                <label class="control-label" for="cell_phone">Celular</label>
+                                <input type="text" class="form-control form-control-sm" value="{% if employee %}{{ employee.cell_phone }}{% endif %}" id="cell_phone" name="cell_phone">
+                            </div>
+                            <div class="form-group col-sm-4 col-lg-4 col-md-4 col-xs-12">
+                                <label class="control-label" for="city">Cidade</label>
+                                <input type="text" class="form-control form-control-sm" value="{% if employee %}{{ employee.city }}{% endif %}" id="city" name="city">
+                            </div>
+                            {% if employee %}
+                                <div class="form-group required col-sm-4 col-lg-4 col-md-4 col-xs-12">
+                                    <label class="control-label" for="situation">Situação</label>
+                                    <select class="selectpicker border form-control form-control-sm" name="situation" id="situation" data-live-search="true" required>
+                                        <option value="">Selecione</option>
+                                        {% for situation in situations %}
+                                            <option value="{{ situation.id }}" {% if employee.situation.id == situation.id %} selected {% endif %}>{{ situation.description }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% else %}
+                                <div class="form-group col-sm-4 col-lg-4 col-md-4 col-xs-12">
+                                    <label class="control-label" for="situation">Situação</label>
+                                    <select class="selectpicker border form-control form-control-sm" name="situation" id="" data-live-search="true" disabled>
+                                        <option value="{{ default_situation.id }}" {% if employee.situation.id == default_situation.id %} selected {% endif %}>{{ default_situation.description }}</option>
+                                    </select>
+                                </div>
+
+                            {% endif %}
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="form-group required col-sm-6 col-lg-6 col-md-6 col-xs-12">
+                                <label class="control-label" for="department">Departamento</label>
+                                <select class="selectpicker border form-control form-control-sm" name="department" id="department" data-live-search="true" required>
+                                    <option value="">Selecione</option>
+                                    {% for department in departments %}
+                                        <option value="{{ department.id }}" {% if employee.department.id == department.id %}selected{% endif %}>{{ department.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6 col-lg-6 col-md-6 col-xs-12">
+                                <label class="control-label" for="manager">Gestor</label>
+                                <input type="hidden" class="form-control form-control-sm" value="{{ manager_id }}" id="manager" name="manager">
+                                <input type="text" class="form-control form-control-sm" value="{{ manager_name }}" id="manager_name" readonly>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-outline-secondary">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+<script src="{% static 'javascript/edit_employee.js' %}"></script>
+
+{% endblock %}

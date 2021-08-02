@@ -6,3 +6,7 @@ scripts/
 .venv/
 *.sqlite3
 .env
+.vscode/
+.pytest_cache
+.mypy_cache
+nivensproject/settings.py

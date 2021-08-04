@@ -7,9 +7,24 @@
 <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'jquery/jquery.js' %}"></script>
 
+<style>
+    a {
+        color: #733E39;
+    }
+
+    .navbar-nav .nav-item.active .nav-link,
+    .navbar-nav .nav-item:hover .nav-link {
+        color: white;
+        background-color: #542e2a;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+</style>
+
 <title>Nivens</title>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg" style="background: #D9C4BF;">
     <a class="navbar-brand" href="#">Nivens</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -29,15 +44,17 @@
     </div>
 </nav>
 
+
 <div class="container">
 
     {% block main %} {% endblock %}
 
 </div>
 
+
 {% block static %} {% endblock %}
 
-{% block grafico %}
+<div class="panel-footer panel-custom">
+    {% include "footer.html" %}
+</div>
 
-
-{% endblock %}

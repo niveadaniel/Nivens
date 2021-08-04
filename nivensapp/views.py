@@ -9,6 +9,12 @@ from datetime import date, datetime
 from django.core import serializers
 
 
+def testing(request):
+    department = Department.objects.all()
+    dic = {'department': department}
+    return render(request, 'table_test.html', dic)
+
+
 def employee_list(request):
     department = Department.objects.all()
     dic = {'department': department}

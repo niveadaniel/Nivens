@@ -1,0 +1,182 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block main %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link href="{% static 'table_test/assets/css/demo.css' %}" rel="stylesheet" />
+
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300" rel="stylesheet" type="text/css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table/dist/bootstrap-table.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}">
+    <script type="text/javascript" src="{% static 'DataTables/datatables.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery.floatingscroll.css' %}">
+    <script type="text/javascript" src="{% static 'jquery/jquery.floatingscroll.min.js' %}"></script>
+
+
+</head>
+<body style="background: white;">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <label class="control-label"><b>Departamento</b></label>
+                <select class="selectpicker form-control" name="department" id="department" data-live-search="True">
+                    <option value="">Todos</option>
+                    {% for d in department %}
+                        <option value="{{ d.id }}">{{ d }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-8 col-md-offset-2">
+                <div class="description">
+                    <h2>Funcionários - Teste</h2>
+                </div>
+                <div class="fresh-table full-color-blue">
+                    <table id="fresh-table" class="table">
+                        <thead>
+                            <th data-field="name" data-sortable="true">Nome</th>
+                            <th data-field="e-mail" data-sortable="true">E-mail</th>
+                            <th data-field="department" data-sortable="true">Departamento</th>
+                            <th data-field="situation" data-sortable="true">Situação</th>
+                            <th data-field="actions" data-formatter="operateFormatter" data-events="operateEvents">Ações</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Dakota Rice</td>
+                                <td>$36,738</td>
+                                <td>Niger</td>
+                                <td>Oud-Turnhout</td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td>2</td>
+                                <td>Minerva Hooper</td>
+                                <td>$23,789</td>
+                                <td>Curaçao</td>
+                                <td>Sinaai-Waas</td>
+                                <td></td>
+                              </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    var $table = $('#fresh-table')
+
+    window.operateEvents = {
+      'click .edit': function (e, value, row, index) {
+        alert('You click edit icon, row: ' + JSON.stringify(row))
+        console.log(value, row, index)
+      },
+      'click .remove': function (e, value, row, index) {
+        $table.bootstrapTable('remove', {
+          field: 'id',
+          values: [row.id]
+        })
+      }
+    }
+
+    function operateFormatter(value, row, index) {
+      return [
+        '<a rel="tooltip" title="Like" class="table-action like" href="javascript:void(0)" title="Like">',
+          '<i class="fa fa-heart"></i>',
+        '</a>',
+        '<a rel="tooltip" title="Edit" class="table-action edit" href="javascript:void(0)" title="Edit">',
+          '<i class="fa fa-edit"></i>',
+        '</a>',
+      ].join('')
+    }
+
+    $(function () {
+      $table.bootstrapTable({
+        classes: 'table table-hover table-striped',
+        toolbar: '.toolbar',
+
+        search: true,
+        showRefresh: true,
+        showToggle: true,
+        showColumns: true,
+        pagination: true,
+        striped: true,
+        sortable: true,
+        pageSize: 8,
+        pageList: [8, 10, 25, 50, 100],
+
+        formatShowingRows: function (pageFrom, pageTo, totalRows) {
+          return ''
+        },
+        formatRecordsPerPage: function (pageNumber) {
+          return pageNumber + ' rows visible'
+        }
+      })
+    })
+</script>
+
+<script>
+
+    var data = [];
+    generateTable();
+    function generateTable(){
+        data = {'department': $('#department').val()};
+        console.log(data);
+        datatable_ticket = $('#data_table').DataTable({
+                "destroy": true,
+                "fixedHeader": false,
+                "ordering": false,
+                "processing": true,
+                "serverSide": true,
+                "ajax":{
+                        url: "/api/list_employee/",
+                        type: "GET",
+                        data: data,
+                        complete: function(response){
+                            $(".scrollbar-table").floatingScroll();
+                        }
+                },
+                "iDisplayLength": 50,
+                "bJQueryUI": false,
+                "language": {
+                    "lengthMenu": "Mostrando _MENU_ registros por página.",
+                    "zeroRecords": "Não foram encontrados registros",
+                    "info": "Exibindo _START_ até _END_ de um total de _TOTAL_ funcionários",
+                    "infoEmpty": "Não foram encontrados registros",
+                    "infoFiltered": "(filtrados de um total de _MAX_ funcionários)",
+                    "paginate": {
+                        "first": "Primeiro",
+                        "last": "Último",
+                        "next": "Próximo",
+                        "previous": "Anterior"
+                    },
+                    "search": "Buscar:"
+                }
+
+        });
+    }
+
+    $('#department').change(function(){
+        generateTable();
+    });
+
+</script>
+
+</html>
+
+{% endblock %}

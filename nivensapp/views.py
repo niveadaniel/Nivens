@@ -1,4 +1,5 @@
 from calendar import monthrange
+import xlsxwriter
 
 from django.db.models import Q
 from django.http import JsonResponse
@@ -7,6 +8,12 @@ from .models import Department, Employee, Situation, PointTime
 from .choices import MONTHS
 from datetime import date, datetime
 from django.core import serializers
+
+
+def testing(request):
+    department = Department.objects.all()
+    dic = {'department': department}
+    return render(request, 'table_test.html', dic)
 
 
 def employee_list(request):
@@ -24,8 +31,8 @@ def create_data_table_employees(employees):
                  employee.email,
                  employee.department.name,
                  employee.situation.description,
-                 "<a href='/edit/employee/?id=%s'>"
-                    "<button type='button' class='btn btn-primary btn-sm' id=''>"
+                 "<a href='/edit/employee/?id=%s' style='padding-right: 5px;'>"
+                    "<button type='button' class='btn btn-primary btn-sm' id='' style='padding-right: 5px;'>"
                          "<span class='edit'>Editar</span></button>"
                  "</a>" % str(employee.id) +
                  "<a href='/list/point_time/?id=%s'>"

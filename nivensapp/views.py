@@ -1,8 +1,10 @@
 from calendar import monthrange
+from io import BytesIO
+
 import xlsxwriter
 
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseServerError
 from django.shortcuts import render
 from .models import Department, Employee, Situation, PointTime
 from .choices import MONTHS
@@ -84,7 +86,6 @@ def edit_employee(request):
 
 
 def save_employee(request):
-    print(request.POST)
     employee_id = request.POST['id']
     name = request.POST['name']
     email = request.POST['email']
@@ -125,8 +126,8 @@ def list_point_time(request):
     employee_id = request.GET.get('id')
     employee = Employee.objects.get(id=employee_id)
     point_time = PointTime.objects.filter(employee=employee_id)
-    initial_year = point_time.first().start_time.year
     actual_year = date.today().year
+    initial_year = point_time.first().start_time.year if point_time else actual_year
     for year in range(initial_year, actual_year+1):
         years.append(year)
     months_choices = MONTHS
@@ -153,21 +154,25 @@ def get_point_time_list(request):
                          'recordsTotal': total})
 
 
+def get_total_hour(point):
+    total_hour = None
+    if point.finish_time:
+        total_hour = point.finish_time - point.start_time
+        if point.break_time and point.back_time:
+            total_hour = total_hour - (point.back_time - point.break_time)
+    else:
+        if point.back_time:
+            total_hour = point.back_time - point.start_time
+        elif point.break_time:
+            total_hour = point.break_time - point.start_time
+    return total_hour
+
+
 def create_data_table_point_time(point_time):
     point_time_list = []
     if point_time:
         for point in point_time:
-            total_hour = None
-            if point.finish_time:
-                total_hour = point.finish_time - point.start_time
-                if point.break_time and point.back_time:
-                    total_hour = total_hour - (point.back_time - point.break_time)
-            else:
-                if point.back_time:
-                    total_hour = point.back_time - point.start_time
-                elif point.break_time:
-                    total_hour = point.break_time - point.start_time
-
+            total_hour = get_total_hour(point)
             point_time_list.append(
                 [point.start_time.strftime('%d/%m'),
                  point.start_time.strftime('%H:%M:%S'),
@@ -178,13 +183,67 @@ def create_data_table_point_time(point_time):
                  ]
             )
     return point_time_list
-   
+
+
+def get_report(request):
+    try:
+        employee_id = request.GET.get('id')
+        month = int(request.GET.get('month'))
+        year = int(request.GET.get('year'))
+        days_in_month = monthrange(year, month)
+        point_time = PointTime.objects.filter(employee=employee_id,
+                                              start_time__gte=datetime(year, month, 1, 0, 0),
+                                              start_time__lte=datetime(year, month, days_in_month[1], 0, 0))
+        times = []
+        for time in point_time:
+            dic = dict()
+            dic['Funcionario'] = time.employee.name
+            dic['Data'] = time.day.strftime('%d/%m/%Y')
+            dic['Entrada'] = time.start_time.strftime('%H:%M:%S') if time.start_time else '-'
+            dic['Pausa'] = time.break_time.strftime('%H:%M:%S') if time.break_time else '-'
+            dic['Retorno'] = time.back_time.strftime('%H:%M:%S') if time.back_time else '-'
+            dic['Saida'] = time.finish_time.strftime('%H:%M:%S') if time.finish_time else '-'
+            total_hour = get_total_hour(time)
+            dic['Total'] = 'h'.join(str(total_hour).split(':')[:2]) if total_hour else '0h'
+            times.append(dic)
+        keys = dic.keys()
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output)
+        worksheet = workbook.add_worksheet()
+        insert_data_excel(times, worksheet, keys)
+        workbook.close()
+        output.seek(0)
+        response = HttpResponse(output,
+                                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+        response['Content-Disposition'] = 'attachment; filename=Relatorio_%s_%s_%s.xlsx' % (point_time[0].employee.name, MONTHS[month-1][1], year)
+        return response
+    except Exception as e:
+        print(e)
+        return HttpResponseServerError('Houve um erro, não foi possível gerar relatório.')
+
+
+def insert_data_excel(lista, worksheet, keys):
+    if len(lista) > 0:
+        for idx, l in enumerate(lista):
+            idx = idx + 1
+            for idx_l, (key, value) in enumerate(l.items()):
+                worksheet.write(idx, idx_l, value)
+
+    for idx, key in enumerate(keys):
+        worksheet.write(0, idx, key)
+        if len(lista) > 0:
+            max_len = max(
+                [max([(len(str(v[1]))) if v[1] is not None else 0, (len(str(v[0]))) if v[0] is not None else 0]) for v
+                 in
+                 [list(x.items())[idx] for x in lista]])
+        else:
+            max_len = len(key)
+        worksheet.set_column(idx, idx, max_len + 3)
+
 
 def dashboard_with_pivot(request):
     tipos = PointTime.objects.raw(
         "select 1 as id, ponto.`day`, ponto.start_time from nivens.ponto group by employee_id;")
     return render(request, 'templates/dashborad_with_pivot.html', {'tipos': tipos})
-
-
-
 

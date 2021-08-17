@@ -4,7 +4,6 @@ function generateTable(){
     data = {'month': $('#month').val(),
             'year': $('#year').val(),
             'employee': $('#employee_id').val()};
-    console.log(data);
     datatable_ticket = $('#data_table').DataTable({
             "destroy": true,
             "fixedHeader": false,
@@ -29,4 +28,12 @@ function generateTable(){
 
 $('#month').change(function(){
     generateTable();
+});
+
+$('#report').on('click', function(e) {
+    e.preventDefault();
+    console.log($('#month').val())
+    var api_url = '/report/api/?id=' + $('#employee_id').val() + '&month='  + $('#month').val() + '&year=' + $('#year').val();
+    window.open(api_url);
+    return false;
 });

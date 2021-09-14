@@ -1,0 +1,48 @@
+body{
+    background-color: white;
+    font-family: Poppins, sans-serif;
+    font-style: inherit;
+    font-size: medium;
+    background: scroll;
+}
+
+.footer {
+    left: 0;
+    right: 0;
+    width: 200%;
+    padding: 20px;
+    background: #011526;
+    text-align: center;
+    margin-top: 400px;
+    font-size: 22px
+    
+}
+
+button{
+    display: inline-block;
+    margin-right: 20px;
+    letter-spacing: 1px;
+    border: 1px solid transparent
+}
+
+/* Works on Firefox */
+* {
+    scrollbar-width: inherit;
+    scrollbar-color: lightblue lightgrey;
+  }
+  
+  /* Works on Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: lightblue;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: lightgrey;
+    border-radius: 20px;
+    border: 3px solid  lightblue;
+  }
+

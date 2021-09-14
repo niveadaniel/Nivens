@@ -9,4 +9,4 @@ scripts/
 .vscode/
 .pytest_cache
 .mypy_cache
-.ipynb_checkpoints
+nivensproject/settings.py

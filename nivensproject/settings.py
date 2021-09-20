@@ -10,7 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import locale
 from pathlib import Path
+import logging
+from decouple import config
+import dj_database_url
+import django_heroku
+
+config.encoding = locale.getpreferredencoding(False)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'z2#ya518r&rzz3_b6@-bvc5o+rp+)aw^kr-f@5r^(!yq%9zf_i'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
+TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', 'herokuapp.com']
 
 
 # Application definition
@@ -52,6 +60,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSRF_COOKIE_SECURE = True
+
+SECURE_SSL_REDIRECT = True
+
+SECURE_HSTS_SECONDS = True
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+SESSION_COOKIE_SECURE = True
+
+SECURE_HSTS_PRELOAD = True
+
 ROOT_URLCONF = 'nivensproject.urls'
 
 TEMPLATES = [
@@ -76,18 +96,25 @@ WSGI_APPLICATION = 'nivensproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+#DATABASES ={'default': dj_database_url.parse('postgres://n9023df_8:suindara9@18.228.208.179:5432/nivens', engine='django.db.backends.postgresql', conn_max_age=600)}
+
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'nivens',
-        'USER': 'root', # Colocar seu usuario local
-        'PASSWORD': 'sokurov.1', # Colocar sua senha local
-        'HOST': 'localhost', # Or an IP Address that your DB is hosted on
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'), # Colocar seu usuario local
+        'PASSWORD': config('DB_PASSWORD'), # Colocar sua senha local
+        'HOST': config('DB_HOST'), # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
 
-X_FRAME_OPTIONS = 'SAMEORIGIN'
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+X_FRAME_OPTIONS = 'DENY'
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -105,6 +132,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -127,3 +156,23 @@ STATICFILES_DIRS = [
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATIC_URL = '/static/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+
+        },
+    },
+    'root': {
+        'handlers':['console'],
+        'level': 'WARNING',
+    },
+
+}
+
+# chamando o django heroku
+
+django_heroku.settings(locals())

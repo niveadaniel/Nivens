@@ -80,8 +80,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nivens',
-        'USER': 'root', # Colocar seu usuario local
-        'PASSWORD': 'sokurov.1', # Colocar sua senha local
+        'USER': 'admin', # Colocar seu usuario local
+        'PASSWORD': 'admin', # Colocar sua senha local
         'HOST': 'localhost', # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
@@ -120,10 +120,13 @@ USE_L10N = True
 USE_TZ = False
 
 
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
-STATIC_URL = '/static/'
+

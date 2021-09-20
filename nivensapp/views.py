@@ -2,28 +2,63 @@ from calendar import monthrange
 from io import BytesIO
 
 import xlsxwriter
+from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
 
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_protect
+
 from .models import Department, Employee, Situation, PointTime
 from .choices import MONTHS
 from datetime import date, datetime
 from django.core import serializers
 
 
+def login(request):
+    return render(request, 'login.html')
+
+
+@csrf_protect
+def login_submit(request):
+    data = {'message': None}
+    if request.POST:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            data['message'] = 'Usuário ou Senha inválido(s). Tente novamente.'
+
+    return redirect('/login/')
+
+def change_password(request):
+    pass
+
+def logout(request):
+    logout(request)
+    return redirect('/login/')
+
+
+@login_required(login_url='/login/')
 def testing(request):
     department = Department.objects.all()
     dic = {'department': department}
     return render(request, 'table_test.html', dic)
 
 
+@login_required(login_url='/login/')
 def employee_list(request):
     department = Department.objects.all()
     dic = {'department': department}
     return render(request, 'employee_list.html', dic)
 
 
+@login_required(login_url='/login/')
 def create_data_table_employees(employees):
     employees_list = []
     if employees:
@@ -46,6 +81,7 @@ def create_data_table_employees(employees):
     return employees_list
 
 
+@login_required(login_url='/login/')
 def get_employees_list(request):
     draw = int(request.GET['draw'])
     value = request.GET['search[value]']
@@ -66,6 +102,7 @@ def get_employees_list(request):
                          'recordsFiltered': total})
 
 
+@login_required(login_url='/login/')
 def edit_employee(request):
     manager_id = request.user.id
     manager_name = request.user
@@ -85,6 +122,7 @@ def edit_employee(request):
     return render(request, 'edit_employee.html', dic)
 
 
+@login_required(login_url='/login/')
 def save_employee(request):
     employee_id = request.POST['id']
     name = request.POST['name']
@@ -121,6 +159,7 @@ def save_employee(request):
         return JsonResponse({'success': False, 'message': 'Não foi possível salvar dados.'})
 
 
+@login_required(login_url='/login/')
 def list_point_time(request):
     years = []
     employee_id = request.GET.get('id')
@@ -138,6 +177,7 @@ def list_point_time(request):
     return render(request, 'point_time_list.html', dic)
 
 
+@login_required(login_url='/login/')
 def get_point_time_list(request):
     draw = int(request.GET['draw'])
     month = int(request.GET['month'])
@@ -154,6 +194,7 @@ def get_point_time_list(request):
                          'recordsTotal': total})
 
 
+@login_required(login_url='/login/')
 def get_total_hour(point):
     total_hour = None
     if point.finish_time:
@@ -168,6 +209,7 @@ def get_total_hour(point):
     return total_hour
 
 
+@login_required(login_url='/login/')
 def create_data_table_point_time(point_time):
     point_time_list = []
     if point_time:
@@ -185,6 +227,7 @@ def create_data_table_point_time(point_time):
     return point_time_list
 
 
+@login_required(login_url='/login/')
 def get_report(request):
     try:
         employee_id = request.GET.get('id')
@@ -242,6 +285,7 @@ def insert_data_excel(lista, worksheet, keys):
         worksheet.set_column(idx, idx, max_len + 3)
 
 
+@login_required(login_url='/login/')
 def dashboard_with_pivot(request):
     tipos = PointTime.objects.raw(
         "select 1 as id, ponto.`day`, ponto.start_time from nivens.ponto group by employee_id;")

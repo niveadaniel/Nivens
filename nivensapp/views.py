@@ -28,9 +28,9 @@ def login_submit(request):
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
 
-        if user is not None:
-            login(request, user)
-            return redirect('/')
+        if user:
+            login(request)
+            return redirect('/list/')
         else:
             data['message'] = 'Usuário ou Senha inválido(s). Tente novamente.'
 

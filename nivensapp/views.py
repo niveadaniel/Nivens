@@ -23,9 +23,10 @@ def login_user(request):
 @csrf_protect
 def login_submit(request):
     data = {'message': None}
+    kwargs = dict(request.POST)
     if request.POST:
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = kwargs['username'][0]
+        password = kwargs['password'][0]
         user = authenticate(username=username, password=password)
 
         if user:
@@ -38,19 +39,15 @@ def login_submit(request):
 
 
 def change_password(request):
-    pass
+    if request.method == 'POST':
+        kwargs = dict(request.POST)
+        print(kwargs)
+    return render(request, 'change_password.html')
 
 
 def logout_user(request):
     logout(request)
     return redirect('/login/')
-
-
-@login_required(login_url='/login/')
-def testing(request):
-    department = Department.objects.all()
-    dic = {'department': department}
-    return render(request, 'table_test.html', dic)
 
 
 @login_required(login_url='/login/')

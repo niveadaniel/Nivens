@@ -3,11 +3,14 @@
 	margin: auto;
 	margin-top: 70px;
 	width: 400px;
-	height: 475px;
+	height: 450px;
 	border: 1px solid #edeef0;
 	font-weight: 600;
 }
-
+h3 {
+    margin-top: 40px;
+    margin-left: 35px;
+}
 .message {
 	width: 600px;
 	height: 10px;
@@ -21,16 +24,16 @@
 }
 
 .col {
-	margin-top: -20px;
+	margin-top: 40px;
 	color: white;
 	font-weight: 1200px;
 	font-size: 13px;
 }
 
 .login {
-	margin-top: 25px;
-	margin-left: 125px;
-	width: 30%;
+	margin-top: 50px;
+	margin-left: 145px;
+	width: 20%;
 	background-color: #011526;
 	border-color: #011526;
 }
@@ -54,22 +57,11 @@
 	margin-left: 460px;
 }
 
-.user, .psw {
-	width: 75%;
-	margin: auto;
-}
-
-a, a:hover {
-	color:#02345e;
-	margin-left: 48px;
-}
-
-.nivens {
-	width: 220px;
-	margin-left: 70px;
-	margin-top: 5px;
-}
 
 .eye {
     float: right;
+}
+
+.psw {
+    margin-top: 20px;
 }

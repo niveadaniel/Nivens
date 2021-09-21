@@ -69,6 +69,7 @@ def create_data_table_employees(employees):
                  employee.email,
                  employee.department.name,
                  employee.situation.description,
+                 '0,00',
                  "<a href='/edit/employee/?id=%s' style='padding-right: 5px;'>"
                     "<button type='button' class='btn btn-primary btn-sm' id='' style='padding-right: 5px;'>"
                          "<span class='edit'>Editar</span></button>"
@@ -104,10 +105,20 @@ def get_employees_list(request):
 
 @login_required(login_url='/login/')
 def edit_employee(request):
-    manager_id = request.user.id
-    manager_name = '%s %s' % (request.user.first_name, request.user.last_name)
     employee_id = request.GET.get('id')
     employee = Employee.objects.get(id=employee_id) if employee_id else None
+    if employee_id:
+        manager_id = employee.manager.id
+        if employee.manager.first_name and employee.manager.last_name:
+            manager_name = '%s %s' % (employee.manager.first_name, employee.manager.last_name)
+        else:
+            manager_name = employee.manager
+    else:
+        manager_id = request.user.id
+        if request.user.first_name and request.user.last_name:
+            manager_name = '%s %s' % (request.user.first_name, request.user.last_name)
+        else:
+            manager_name = request.user.username
     departments = Department.objects.all()
     situations = Situation.objects.all()
     default_situation = Situation.objects.filter(description='Ativo')
@@ -218,6 +229,7 @@ def create_data_table_point_time(point_time):
                  point.back_time.strftime('%H:%M:%S') if point.back_time else '-',
                  point.finish_time.strftime('%H:%M:%S') if point.finish_time else '-',
                  'h'.join(str(total_hour).split(':')[:2]) if total_hour else '0h',
+                 '0,00',
                  ]
             )
     return point_time_list

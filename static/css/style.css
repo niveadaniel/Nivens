@@ -73,3 +73,19 @@ a, a:hover {
 .eye {
     float: right;
 }
+
+.error-msg {
+    margin: auto;
+    margin-top: 5px;
+    width: 80%;
+    height: 20px;
+}
+
+.alert-txt{
+    margin: auto;
+    margin-top: -10px;
+}
+
+.user {
+    margin-top: 10px;
+}

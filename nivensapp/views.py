@@ -4,6 +4,7 @@ from io import BytesIO
 import xlsxwriter
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError
@@ -22,7 +23,6 @@ def login_user(request):
 
 @csrf_protect
 def login_submit(request):
-    data = {'message': None}
     kwargs = dict(request.POST)
     if request.POST:
         username = kwargs['username'][0]
@@ -33,7 +33,7 @@ def login_submit(request):
             login(request, user)
             return redirect('/list/')
         else:
-            data['message'] = 'Usuário ou Senha inválido(s). Tente novamente.'
+            messages.error(request, 'Usuário ou senha inválidos')
 
     return redirect('/login/')
 

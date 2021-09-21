@@ -25,6 +25,7 @@ SECRET_KEY = 'z2#ya518r&rzz3_b6@-bvc5o+rp+)aw^kr-f@5r^(!yq%9zf_i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Hosts permitidos na aplicação.
 ALLOWED_HOSTS = ['*']
 
 
@@ -39,8 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'nivensapp',
     'bot',
-        
+
 ]
+
+# Lista de middlewares necessários para a aplicação funcionar
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,8 +55,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Definição do caminho das urls
 ROOT_URLCONF = 'nivensproject.urls'
 
+# Backend dos templates da aplicação.
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -70,24 +75,28 @@ TEMPLATES = [
     },
 ]
 
+# Definição do nome do objeto wsgi, usado para deploy também
 WSGI_APPLICATION = 'nivensproject.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# Parâmetros de conexão do banco
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nivens',
-        'USER': 'admin', # Colocar seu usuario local
-        'PASSWORD': 'admin', # Colocar sua senha local
-        'HOST': 'localhost', # Or an IP Address that your DB is hosted on
+        'USER': 'root',  # Colocar seu usuario local
+        'PASSWORD': 'sokurov.1check',  # Colocar sua senha local
+        'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
 
+# Definição das opções do objeto X_FRAME_ORIGIN
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -119,14 +128,13 @@ USE_L10N = True
 
 USE_TZ = False
 
-
+# Definição do path da pasta static
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+# Definição do path de mídia estática
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
-

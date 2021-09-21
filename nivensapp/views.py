@@ -57,7 +57,6 @@ def employee_list(request):
     return render(request, 'employee_list.html', dic)
 
 
-@login_required(login_url='/login/')
 def create_data_table_employees(employees):
     employees_list = []
     if employees:
@@ -80,7 +79,6 @@ def create_data_table_employees(employees):
     return employees_list
 
 
-@login_required(login_url='/login/')
 def get_employees_list(request):
     draw = int(request.GET['draw'])
     value = request.GET['search[value]']
@@ -158,7 +156,6 @@ def save_employee(request):
         return JsonResponse({'success': False, 'message': 'Não foi possível salvar dados.'})
 
 
-@login_required(login_url='/login/')
 def list_point_time(request):
     years = []
     employee_id = request.GET.get('id')
@@ -176,7 +173,6 @@ def list_point_time(request):
     return render(request, 'point_time_list.html', dic)
 
 
-@login_required(login_url='/login/')
 def get_point_time_list(request):
     draw = int(request.GET['draw'])
     month = int(request.GET['month'])
@@ -193,7 +189,6 @@ def get_point_time_list(request):
                          'recordsTotal': total})
 
 
-@login_required(login_url='/login/')
 def get_total_hour(point):
     total_hour = None
     if point.finish_time:
@@ -208,7 +203,6 @@ def get_total_hour(point):
     return total_hour
 
 
-@login_required(login_url='/login/')
 def create_data_table_point_time(point_time):
     point_time_list = []
     if point_time:
@@ -226,7 +220,6 @@ def create_data_table_point_time(point_time):
     return point_time_list
 
 
-@login_required(login_url='/login/')
 def get_report(request):
     try:
         employee_id = request.GET.get('id')

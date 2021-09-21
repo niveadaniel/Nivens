@@ -4,6 +4,7 @@ from io import BytesIO
 import xlsxwriter
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError
@@ -22,35 +23,31 @@ def login_user(request):
 
 @csrf_protect
 def login_submit(request):
-    data = {'message': None}
+    kwargs = dict(request.POST)
     if request.POST:
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = kwargs['username'][0]
+        password = kwargs['password'][0]
         user = authenticate(username=username, password=password)
 
         if user:
             login(request, user)
             return redirect('/list/')
         else:
-            data['message'] = 'Usuário ou Senha inválido(s). Tente novamente.'
+            messages.error(request, 'Usuário ou senha inválidos')
 
     return redirect('/login/')
 
 
 def change_password(request):
-    pass
+    if request.method == 'POST':
+        kwargs = dict(request.POST)
+        print(kwargs)
+    return render(request, 'change_password.html')
 
 
 def logout_user(request):
     logout(request)
     return redirect('/login/')
-
-
-# @login_required(login_url='/login/')
-# def testing(request):
-#     department = Department.objects.all()
-#     dic = {'department': department}
-#     return render(request, 'table_test.html', dic)
 
 
 @login_required(login_url='/login/')

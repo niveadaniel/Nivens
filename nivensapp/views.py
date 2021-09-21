@@ -105,7 +105,7 @@ def get_employees_list(request):
 @login_required(login_url='/login/')
 def edit_employee(request):
     manager_id = request.user.id
-    manager_name = request.user
+    manager_name = '%s %s' % (request.user.first_name, request.user.last_name)
     employee_id = request.GET.get('id')
     employee = Employee.objects.get(id=employee_id) if employee_id else None
     departments = Department.objects.all()

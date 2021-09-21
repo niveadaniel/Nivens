@@ -2,7 +2,7 @@ from calendar import monthrange
 from io import BytesIO
 
 import xlsxwriter
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
 
 from django.db.models import Q
@@ -16,7 +16,7 @@ from datetime import date, datetime
 from django.core import serializers
 
 
-def login(request):
+def login_user(request):
     return render(request, 'login.html')
 
 
@@ -29,7 +29,7 @@ def login_submit(request):
         user = authenticate(username=username, password=password)
 
         if user:
-            login(request)
+            login(request, user)
             return redirect('/list/')
         else:
             data['message'] = 'Usuário ou Senha inválido(s). Tente novamente.'

@@ -1,7 +1,7 @@
 
 .jumbotron {
 	margin: auto;
-	margin-top: 30px;
+	margin-top: 35px;
 	width: 400px;
 	height: 475px;
 	border: 1px solid #edeef0;
@@ -68,4 +68,8 @@ a, a:hover {
 	width: 220px;
 	margin-left: 70px;
 	margin-top: 5px;
+}
+
+.eye {
+    float: right;
 }

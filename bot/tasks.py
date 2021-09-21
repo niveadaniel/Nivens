@@ -93,6 +93,10 @@ async def entrar(ctx):
             await ctx.send(f"Ponto batido, entrada: {funcionario_nome}"
                            f"\n{new_point.start_time.strftime('%m/%d/%Y às %H:%M:%S')}")
 
+    else:
+        await ctx.send(f"Usuário {ctx.message.author}"
+                       f" não cadastrado no sistema.")
+
 
 @client.command()
 async def almoco(ctx):
@@ -112,6 +116,9 @@ async def almoco(ctx):
                                f"\n{new_point.break_time.strftime('%m/%d/%Y às %H:%M:%S')}")
         else:
             await ctx.send(f"Não foi possível realizar batida de almoço.\nEntrada não foi cadastrada.")
+    else:
+        await ctx.send(f"Usuário {ctx.message.author}"
+                       f" não cadastrado no sistema.")
 
 
 @client.command()
@@ -131,6 +138,9 @@ async def almocov(ctx):
                                f"\n{new_point.back_time.strftime('%m/%d/%Y às %H:%M:%S')}")
         else:
             await ctx.send(f"Não foi possível realizar batida de retorno do almoço.\nEntrada não foi cadastrada.")
+    else:
+        await ctx.send(f"Usuário {ctx.message.author}"
+                       f" não cadastrado no sistema.")
 
 
 @client.command()
@@ -150,6 +160,9 @@ async def saida(ctx):
                                f"\n{new_point.finish_time.strftime('%m/%d/%Y às %H:%M:%S')}")
         else:
             await ctx.send(f"Não foi possível realizar batida de saída.\nEntrada não foi cadastrada.")
+    else:
+        await ctx.send(f"Usuário {ctx.message.author}"
+                       f" não cadastrado no sistema.")
 
 
 @client.command(aliases =['8ball', 'Vidente', 'vidente'])

@@ -2,7 +2,7 @@ from calendar import monthrange
 from io import BytesIO
 
 import xlsxwriter
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 
 from django.db.models import Q
@@ -36,10 +36,12 @@ def login_submit(request):
 
     return redirect('/login/')
 
+
 def change_password(request):
     pass
 
-def logout(request):
+
+def logout_user(request):
     logout(request)
     return redirect('/login/')
 

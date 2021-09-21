@@ -3,6 +3,14 @@ from django.db import models
 
 
 class Department(models.Model):
+    """[summary]
+
+    Args:
+        models ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     name = models.CharField(max_length=50, blank=False, null=False)
 
     def __str__(self):
@@ -15,6 +23,14 @@ class Department(models.Model):
 
 
 class Situation(models.Model):
+    """[summary]
+
+    Args:
+        models ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     description = models.CharField(max_length=20, blank=False, null=False)
 
     def __str__(self):
@@ -27,6 +43,14 @@ class Situation(models.Model):
 
 
 class Employee(models.Model):
+    """[summary]
+
+    Args:
+        models ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     name = models.CharField(max_length=50, blank=False, null=False)
     manager = models.ForeignKey(User, on_delete=models.CASCADE,
                                 blank=False, null=False)
@@ -38,7 +62,8 @@ class Employee(models.Model):
     city = models.CharField(max_length=20, null=True, blank=True)
     situation = models.ForeignKey(Situation, on_delete=models.DO_NOTHING,
                                   max_length=20, null=True, blank=True)
-    discord_username = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    discord_username = models.CharField(
+        max_length=50, unique=True, null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
@@ -50,6 +75,14 @@ class Employee(models.Model):
 
 
 class PointTime(models.Model):
+    """[summary]
+
+    Args:
+        models ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE,
                                  blank=False, null=False)
     day = models.DateField(auto_now_add=True, null=False,

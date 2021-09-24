@@ -409,15 +409,3 @@ def insert_data_excel(lista, worksheet, keys):
 
 
 @login_required(login_url='/login/')
-def dashboard_with_pivot(request):
-    """[summary]
-
-    Args:
-        request ([type]): [description]
-
-    Returns:
-        [type]: [description]
-    """
-    tipos = PointTime.objects.raw(
-        "select 1 as id, ponto.`day`, ponto.start_time from nivens.ponto group by employee_id;")
-    return render(request, 'templates/dashborad_with_pivot.html', {'tipos': tipos})

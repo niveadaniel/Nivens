@@ -3,13 +3,13 @@ from django.db import models
 
 
 class Department(models.Model):
-    """[summary]
+    """Define modelo de cadastro de novos departamentos.
 
     Args:
-        models ([type]): [description]
+        models (object): Objeto do modelo.
 
     Returns:
-        [type]: [description]
+        [object]: Modelo final.
     """
     name = models.CharField(max_length=50, blank=False, null=False)
 
@@ -23,13 +23,13 @@ class Department(models.Model):
 
 
 class Situation(models.Model):
-    """[summary]
+    """Define modelo de cadastro de novas situações de funcionários.
 
     Args:
-        models ([type]): [description]
+        models (object): Objeto do modelo.
 
     Returns:
-        [type]: [description]
+        [object]: Modelo final.
     """
     description = models.CharField(max_length=20, blank=False, null=False)
 
@@ -43,13 +43,13 @@ class Situation(models.Model):
 
 
 class Employee(models.Model):
-    """[summary]
+    """Define modelo de cadastro de novos funcionários.
 
     Args:
-        models ([type]): [description]
+        models (object): Objeto do modelo.
 
     Returns:
-        [type]: [description]
+        [object]: Modelo final.
     """
     name = models.CharField(max_length=50, blank=False, null=False)
     manager = models.ForeignKey(User, on_delete=models.CASCADE,
@@ -75,13 +75,14 @@ class Employee(models.Model):
 
 
 class PointTime(models.Model):
-    """[summary]
+    """Define o modelo para captar os dados 
+    do ponto batido no bot do Discord.
 
     Args:
-        models ([type]): [description]
+        models (object): Objeto do modelo.
 
     Returns:
-        [type]: [description]
+        [object]: Modelo de guarda do dado.
     """
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE,
                                  blank=False, null=False)
@@ -100,18 +101,3 @@ class PointTime(models.Model):
         verbose_name = 'Ponto'
         verbose_name_plural = 'Pontos'
         unique_together = ('employee', 'day')
-
-
-# class Report(models.Model):# refazer
-#
-#     employee = models.ForeignKey(Employee, on_delete=models.CASCADE,
-#                                     blank=False, null=False)
-#     day = models.DateField(auto_now_add=True, null=False,
-#                         blank=False, editable=True)
-#     start_time = models.DateTimeField(null=True, blank=True)
-#     break_time = models.DateTimeField(null=True, blank=True)
-#     back_time = models.DateTimeField(null=True, blank=True)
-#     finish_time = models.DateTimeField(null=True, blank=True)
-#
-#     def __str__(self):
-#         return str(self.employee.name) + ' - ' + str(self.day)

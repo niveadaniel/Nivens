@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'nivensapp',
     'bot',
-
+    
 ]
 
 # Lista de middlewares necessários para a aplicação funcionar
@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nivens',
         'USER': 'root',  # Colocar seu usuario local
-        'PASSWORD': 'sokurov.1check',  # Colocar sua senha local
+        'PASSWORD': 'sokurov.1',  # Colocar sua senha local
         'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }

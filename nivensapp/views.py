@@ -254,13 +254,13 @@ def list_point_time(request):
 
 
 def get_point_time_list(request):
-    """[summary]
+    """Função para pedir lista de pontos trecebidos.
 
     Args:
-        request ([type]): [description]
+        request (object): Objeto responsável pela requisição para a API.
 
     Returns:
-        [type]: [description]
+        file: Json com resposta da requisição.
     """
     draw = int(request.GET['draw'])
     month = int(request.GET['month'])
@@ -279,13 +279,13 @@ def get_point_time_list(request):
 
 
 def get_total_hour(point):
-    """[summary]
+    """Função para calcular total de horas trabalhadas.
 
     Args:
-        point ([type]): [description]
+        point (object): Objeto com os tempos inserdidos via Discord.
 
     Returns:
-        [type]: [description]
+        total_hour (object): Objeto contendo o total de horas calculadas.
     """
     total_hour = None
     if point.finish_time:
@@ -301,13 +301,13 @@ def get_total_hour(point):
 
 
 def create_data_table_point_time(point_time):
-    """[summary]
+    """Função que cria atabela de dados de pontos.
 
     Args:
-        point_time ([type]): [description]
+        point_time (object): Objeto contendo dados de pontos recebidos da API do Discord.
 
     Returns:
-        [type]: [description]
+        list: Lista de dados de pontos já estruturados.
     """
     point_time_list = []
     if point_time:
@@ -330,13 +330,13 @@ def create_data_table_point_time(point_time):
 
 
 def get_report(request):
-    """[summary]
+    """Função para chamar o report de horas trabalhadas.
 
     Args:
-        request ([type]): [description]
+        request (object): Objeto responsável pela requisição para a API.
 
     Returns:
-        [type]: [description]
+        object: Resposta da requisição.
     """
     try:
         employee_id = request.GET.get('id')
@@ -383,12 +383,12 @@ def get_report(request):
 
 
 def insert_data_excel(lista, worksheet, keys):
-    """[summary]
+    """Função para inserção de dados numa planilha excel.
 
     Args:
-        lista ([type]): [description]
-        worksheet ([type]): [description]
-        keys ([type]): [description]
+        lista (list): Lista com dados a serem gravados.
+        worksheet (object): Objeto para gravação de arquivo excel.
+        keys (dict): Chaves dos dados a serem gravados.
     """
     if len(lista) > 0:
         for idx, l in enumerate(lista):

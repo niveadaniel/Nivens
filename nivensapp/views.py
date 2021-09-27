@@ -45,6 +45,13 @@ def change_password(request):
     return render(request, 'change_password.html')
 
 
+def forgot_password(request):
+    if request.method == 'POST':
+        kwargs = dict(request.POST)
+        print(kwargs)
+    return render(request, 'forgot_password.html')
+
+
 def logout_user(request):
     logout(request)
     return redirect('/login/')

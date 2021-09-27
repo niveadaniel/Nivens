@@ -24,4 +24,26 @@ Projeto de TCC, desenvolvido para Fatec.
 ```
 
 ************
+## Como utilizar este repositório
 
+1. Clone este repositório:
+```
+git clone https://github.com/niveadaniel/Nivens.git
+```
+
+2. Crie um ambiente dedicado. É possível criar esse ambiente usando Anaconda:
+
+```python
+conda create --name myenv
+```
+Ou com Virtualenv:
+
+- Instale o virtualenv no diretório desejado:
+```python
+pip install virtualenv
+```
+- Em seguida digite:
+
+```python
+python3 -m venv env
+```

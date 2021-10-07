@@ -40,3 +40,22 @@ function generateTable(){
 $('#department').change(function(){
     generateTable();
 });
+
+$(document).on('click', 'a[notification-modal]', function(e) {
+    e.preventDefault();
+    swal({
+        title: "Atenção",
+        text: "Você realmente deseja deletar o funcionário?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            swal("Funcionário excluido com sucesso!", {
+              icon: "success",
+            });
+            location.href = $(this).attr('href');
+        }
+    });
+});

@@ -4,7 +4,7 @@ from .models import Employee, Department, Situation, PointTime
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'cell_phone', 'manager']
+    list_display = ['name', 'email', 'cell_phone', 'manager', 'situation', 'active']
     search_fields = ('name', 'email', 'cell_phone', 'manager')
 
 

@@ -4,6 +4,8 @@ from io import BytesIO
 import xlsxwriter
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.models import User
 from django.contrib import messages
 
 from django.db.models import Q
@@ -15,6 +17,12 @@ from .models import Department, Employee, Situation, PointTime
 from .choices import MONTHS
 from datetime import date, datetime
 from django.core import serializers
+
+from django.core.mail import send_mail, BadHeaderError
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.template.loader import render_to_string
 
 
 def login_user(request):
@@ -38,23 +46,40 @@ def login_submit(request):
     return redirect('/login/')
 
 
-def change_password(request):
-    if request.method == 'POST':
-        kwargs = dict(request.POST)
-        print(kwargs)
-    return render(request, 'change_password.html')
-
-
-def forgot_password(request):
-    if request.method == 'POST':
-        kwargs = dict(request.POST)
-        print(kwargs)
-    return render(request, 'forgot_password.html')
-
-
 def logout_user(request):
     logout(request)
     return redirect('/login/')
+
+
+def password_reset_request(request):
+    if request.method == 'POST':
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Pedido de Redefinicao de Senha"
+                    email_template_name = "password_reset_email.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'Nivens',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, 'equipenivens@gmail.com', [user.email], fail_silently=False)
+                        # Senha: FATECscsnivens2021!
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("/password_reset/done/")
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="password_reset.html",
+                  context={"password_reset_form": password_reset_form})
 
 
 @login_required(login_url='/login/')

@@ -51,12 +51,35 @@ h3 {
 	height: 3.0rem;
 }
 
-.footer-text{
+.footer-text {
 	margin-top: 10px;
 	color: #04C4D9;
 	margin-left: 460px;
 }
 
+.reset-request {
+    width: 35%;
+    margin-left: 115px;
+    margin-top: 80px;
+}
+
+.reset-input {
+    margin-top: 20px;
+
+}
+
+.comp-reset {
+    margin-left: 145px;
+    margin-top: 115px;
+}
+
+.reset-div {
+    margin-top: -10px;
+}
+
+.reset-text {
+    font-size: 16px;
+}
 
 .eye {
     float: right;

@@ -16,9 +16,13 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from nivensapp import views
+
+app_name = "main"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('nivensapp.urls')),
+    path('password_reset', views.password_reset_request, name='password_reset'),
             
 ]

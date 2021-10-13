@@ -25,6 +25,11 @@ from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
 
 
+def index(request):
+    return redirect('/login/')
+
+
+@csrf_protect
 def login_user(request):
     return render(request, 'login.html')
 
@@ -98,13 +103,17 @@ def create_data_table_employees(employees):
                  employee.email,
                  employee.department.name,
                  employee.situation.description,
-                 "<a href='/edit/employee/?id=%s' style='padding-right: 5px;'>"
+                 "<a href='/edit/employee/?id=%s'>"
                     "<button type='button' class='btn btn-primary btn-sm' id='' style='padding-right: 5px;'>"
                          "<span class='edit'>Editar</span></button>"
                  "</a>" % str(employee.id) +
                  "<a href='/list/point_time/?id=%s'>"
                     "<button type='button' class='btn btn-dark btn-sm' id=''>"
                         "<span class='edit'>Espelho</span></button>"
+                 "</a>" % str(employee.id) +
+                 "<a href='/delete/employee?id=%s' notification-modal='1'>"
+                    "<button type='button' class='btn btn-danger btn-sm btn-delete' >"
+                        "<span class='delete'>Deletar</span></button>"
                  "</a>" % str(employee.id)
                  ]
             )
@@ -115,7 +124,7 @@ def get_employees_list(request):
     draw = int(request.GET['draw'])
     value = request.GET['search[value]']
     department_id = request.GET['department']
-    employees = Employee.objects.all()
+    employees = Employee.objects.filter(manager_id=request.user.id, active=True)
     if department_id:
         employees = Employee.objects.filter(department_id=department_id)
     if value:
@@ -133,10 +142,20 @@ def get_employees_list(request):
 
 @login_required(login_url='/login/')
 def edit_employee(request):
-    manager_id = request.user.id
-    manager_name = request.user
     employee_id = request.GET.get('id')
     employee = Employee.objects.get(id=employee_id) if employee_id else None
+    if employee_id:
+        manager_id = employee.manager.id
+        if employee.manager.first_name and employee.manager.last_name:
+            manager_name = '%s %s' % (employee.manager.first_name, employee.manager.last_name)
+        else:
+            manager_name = employee.manager
+    else:
+        manager_id = request.user.id
+        if request.user and request.user.first_name and request.user.last_name:
+            manager_name = '%s %s' % (request.user.first_name, request.user.last_name)
+        else:
+            manager_name = request.user.username
     departments = Department.objects.all()
     situations = Situation.objects.all()
     default_situation = Situation.objects.filter(description='Ativo')
@@ -160,10 +179,11 @@ def save_employee(request):
     city = request.POST['city']
     department = request.POST['department']
     manager = request.POST['manager']
+    discord_username = request.POST['discord_username']
     if 'situation' in request.POST:
         situation = request.POST['situation']
     else:
-        situation = default_situation = Situation.objects.filter(description='Ativo')[0].id
+        situation = Situation.objects.filter(description='Ativo')[0].id
     try:
         if employee_id:
             Employee.objects.filter(id=employee_id).update(name=name,
@@ -172,7 +192,8 @@ def save_employee(request):
                                                            city=city,
                                                            department_id=department,
                                                            manager_id=manager,
-                                                           situation_id=situation)
+                                                           situation_id=situation,
+                                                           discord_username=discord_username)
         else:
             Employee.objects.create(name=name,
                                     email=email,
@@ -180,7 +201,8 @@ def save_employee(request):
                                     city=city,
                                     department_id=department,
                                     manager_id=manager,
-                                    situation_id=situation)
+                                    situation_id=situation,
+                                    discord_username=discord_username)
 
         return JsonResponse({'success': True})
     except Exception as e:
@@ -247,6 +269,7 @@ def create_data_table_point_time(point_time):
                  point.back_time.strftime('%H:%M:%S') if point.back_time else '-',
                  point.finish_time.strftime('%H:%M:%S') if point.finish_time else '-',
                  'h'.join(str(total_hour).split(':')[:2]) if total_hour else '0h',
+                 '0,00',
                  ]
             )
     return point_time_list
@@ -288,6 +311,16 @@ def get_report(request):
     except Exception as e:
         print(e)
         return HttpResponseServerError('Houve um erro, não foi possível gerar relatório.')
+
+
+def delete_employee(request):
+    id = request.GET.get('id')
+    if id:
+        employee = Employee.objects.get(id=id)
+        employee.active = False
+        employee.save()
+    return redirect('/list')
+
 
 
 def insert_data_excel(lista, worksheet, keys):

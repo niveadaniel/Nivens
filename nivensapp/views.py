@@ -13,6 +13,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseServerError
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
 
+from nivensproject.settings import EMAIL_HOST_USER
 from .models import Department, Employee, Situation, PointTime
 from .choices import MONTHS
 from datetime import date, datetime
@@ -75,12 +76,11 @@ def password_reset_request(request):
                         'token': default_token_generator.make_token(user),
                         'protocol': 'http',
                     }
-                    email = render_to_string(email_template_name, c)
+                    message = render_to_string(email_template_name, c)
                     try:
-                        send_mail(subject, email, 'equipenivens@gmail.com', [user.email], fail_silently=False)
-                        # Senha: FATECscsnivens2021!
-                    except BadHeaderError:
-                        return HttpResponse('Invalid header found.')
+                        send_mail(subject, message, EMAIL_HOST_USER, [user.email], fail_silently=False)
+                    except Exception as ex:
+                        return HttpResponse(ex)
                     return redirect("/password_reset/done/")
     password_reset_form = PasswordResetForm()
     return render(request=request, template_name="password_reset.html",
@@ -104,8 +104,8 @@ def create_data_table_employees(employees):
                  employee.department.name,
                  employee.situation.description,
                  "<a href='/edit/employee/?id=%s'>"
-                    "<button type='button' class='btn btn-primary btn-sm' id='' style='padding-right: 5px;'>"
-                         "<span class='edit'>Editar</span></button>"
+                    "<button type='button' class='btn btn-primary btn-sm' id='edit-list' style='padding-right: 5px;'>"
+                        "</button>" 
                  "</a>" % str(employee.id) +
                  "<a href='/list/point_time/?id=%s'>"
                     "<button type='button' class='btn btn-dark btn-sm' id=''>"

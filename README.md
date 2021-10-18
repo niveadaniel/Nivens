@@ -79,7 +79,7 @@ Para desativar digite:
 pip install -r requirements.txt
 ```
 
-4. Aguarde a instalação das dependências e em seguida, crie uma banco de dados com nome **nivens** no seu servidor MySQL local e insira seus parâmetros de conexão locais no arquivo setting.py;
+4. Aguarde a instalação das dependências e em seguida, crie uma banco de dados com nome **nivens** no seu servidor MySQL local e insira seus parâmetros de conexão locais no arquivo settings.py;
 
 5. Dentro do projeto Nivens digite ```python manage.py createsuperuser``` para criar o usuário administrador local;
 

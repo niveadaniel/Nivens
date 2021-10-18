@@ -16,6 +16,19 @@ from .choices import MONTHS
 from .models import Department, Employee, PointTime, Situation
 
 
+def index(request):
+    """Função que gera o index da aplicação.
+
+    Args:
+        request (object): Objeto da requisição.
+
+    Returns:
+        object: Redirecionamento da página.
+    """
+    return redirect('/login/')
+
+
+@csrf_protect
 def login_user(request):
     """Função para realizar login do usuário.
 
@@ -53,6 +66,7 @@ def login_submit(request):
     return redirect('/login/')
 
 
+@csrf_protect
 def change_password(request):
     """Função de troca de senha.
 
@@ -68,6 +82,7 @@ def change_password(request):
     return render(request, 'change_password.html')
 
 
+@csrf_protect
 def logout_user(request):
     """Função de logout do usuário.
 
@@ -382,6 +397,23 @@ def get_report(request):
         return HttpResponseServerError('Houve um erro, não foi possível gerar relatório.')
 
 
+def delete_employee(request):
+    """Função que deleta um funcionário.
+
+    Args:
+        request (object): Objeto da requisição.
+
+    Returns:
+        object: Redirecionamento de página.
+    """
+    id = request.GET.get('id')
+    if id:
+        employee = Employee.objects.get(id=id)
+        employee.active = False
+        employee.save()
+    return redirect('/list')
+
+
 def insert_data_excel(lista, worksheet, keys):
     """Função para inserção de dados numa planilha excel.
 
@@ -406,6 +438,3 @@ def insert_data_excel(lista, worksheet, keys):
         else:
             max_len = len(key)
         worksheet.set_column(idx, idx, max_len + 3)
-
-
-

@@ -36,9 +36,9 @@
 
 <title>NIVENS</title>
 <nav class="navbar navbar-expand-lg" style="background: #d5f4e6; opacity: 0.8; display: flex;">
-        <a class="navbar-brand" href="#">
-     <img src={% static 'img/logo.png' %} alt="logo">
-        </a>
+    <a class="navbar-brand" href="#">
+        <img src={% static 'img/logo.png' %} alt="logo">
+    </a>
           
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
      
@@ -48,7 +48,7 @@
     <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-            <a class="nav-link" href="{% url 'employee_list' %}">Home <span class="sr-only">(current)</span></a>
+               <a class="nav-link" href="{% url 'employee_list' %}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Sobre Nós</a>
@@ -57,8 +57,13 @@
                 <a class="nav-link" href="https://lingsv.github.io/nivensdocs/">User Guide</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/logout/">Log out</a>
+              <a class="nav-link" href="/logout/">Logout</a>
             </li>
+            {% if request.user and request.user.first_name %}
+                <li class="nav">
+                    <p class="nav-link" style="color: #034f84;"> {{request.user.first_name}} </p>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
@@ -75,4 +80,5 @@
 <div class="panel-footer panel-custom">
     {% include "footer.html" %}
 </div>
+
 

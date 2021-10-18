@@ -105,7 +105,7 @@
                         <br>
 
                         <div class="row">
-                            <div class="form-group required col-sm-6 col-lg-6 col-md-6 col-xs-12">
+                            <div class="form-group required col-sm-4 col-lg-4 col-md-4 col-xs-12">
                                 <label class="control-label" for="department">Departamento</label>
                                 <select class="selectpicker border form-control form-control-sm" name="department" id="department" data-live-search="true" required>
                                     <option value="">Selecione</option>
@@ -114,10 +114,14 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="form-group col-sm-6 col-lg-6 col-md-6 col-xs-12">
+                            <div class="form-group col-sm-4 col-lg-4 col-md-4 col-xs-12">
                                 <label class="control-label" for="manager">Gestor</label>
-                                <input type="hidden" class="form-control form-control-sm" value="{{ manager_id }}" id="manager" name="manager">
-                                <input type="text" class="form-control form-control-sm" value="{{ manager_name }}" id="manager_name" readonly>
+                                <input type="hidden" class="form-control form-control-sm" value="{% if manager_id %}{{ manager_id }}{% endif %}" id="manager" name="manager">
+                                <input type="text" class="form-control form-control-sm" value="{% if manager_name %}{{ manager_name }}{% endif %}" id="manager_name" readonly>
+                            </div>
+                            <div class="form-group col-sm-4 col-lg-4 col-md-4 col-xs-12">
+                                <label class="control-label" for="discord_username">Discord</label>
+                                <input type="text" class="form-control form-control-sm" value="{% if employee %}{{ employee.discord_username }}{% endif %}" id="discord_username" name="discord_username">
                             </div>
                         </div>
 

@@ -10,7 +10,7 @@ class EmployeeAdmin(admin.ModelAdmin):
     Args:
         admin (object): objeto do administrador.
     """
-    list_display = ['name', 'email', 'cell_phone', 'manager']
+    list_display = ['name', 'email', 'cell_phone', 'manager', 'situation', 'active']
     search_fields = ('name', 'email', 'cell_phone', 'manager')
 
 

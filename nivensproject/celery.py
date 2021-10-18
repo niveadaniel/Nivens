@@ -1,10 +1,13 @@
 import os
-from celery import Celery
 
+from celery import Celery
+# Path do módulo
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'nivensproject.settings')
 
+# Criação do objeto
 app = Celery('nivensproject')
 
+# Configuração do objeto
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django apps.

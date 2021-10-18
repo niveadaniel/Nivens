@@ -64,8 +64,14 @@ python3 -m venv env
 
 Para ativar o ambiente digite: 
 
-Para desativar digite:
+```python
+source myenv/bin/activate
+```
 
+Para desativar digite:
+```python
+(myenv) $ deactivate
+``` 
 
 3. Após criar e ativar um ambiente virtual no seu terminal, navegue até a pasta Nivens e digite:
 

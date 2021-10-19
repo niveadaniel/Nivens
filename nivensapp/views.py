@@ -2,9 +2,9 @@ from calendar import monthrange
 from io import BytesIO
 
 import xlsxwriter
-from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth import authenticate, logout, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 
@@ -88,6 +88,22 @@ def password_reset_request(request):
 
 
 @login_required(login_url='/login/')
+@csrf_protect
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Senha alterada com sucesso! Clique em Voltar para retornar a página inicial.')
+            return redirect('change_password')
+    else:
+        form = PasswordChangeForm(request.user)
+    print(form)
+    return render(request, 'change_password.html', {'form': form, 'change_password': True})
+
+
+@login_required(login_url='/login/')
 def employee_list(request):
     department = Department.objects.all()
     dic = {'department': department}
@@ -104,16 +120,19 @@ def create_data_table_employees(employees):
                  employee.department.name,
                  employee.situation.description,
                  "<a href='/edit/employee/?id=%s'>"
-                    "<button type='button' class='btn btn-primary btn-sm' id='edit-list' style='padding-right: 5px;'>"
-                        "</button>" 
+                    "<button type='button' class='btn btn-primary btn-sm' data-toggle='tooltip' data-placement='bottom'"
+                        " title='Editar Funcionário' id='edit-list' style='padding-right: 5px;'>"
+                        "<i class='fas fa-user-edit'></i></button>"
                  "</a>" % str(employee.id) +
                  "<a href='/list/point_time/?id=%s'>"
-                    "<button type='button' class='btn btn-dark btn-sm' id=''>"
-                        "<span class='edit'>Espelho</span></button>"
+                    "<button type='button' class='btn btn-dark btn-sm' data-toggle='tooltip' data-placement='bottom' "
+                        "title='Espelho'>"
+                        "<i class='far fa-clipboard'></i></button>"
                  "</a>" % str(employee.id) +
                  "<a href='/delete/employee?id=%s' notification-modal='1'>"
-                    "<button type='button' class='btn btn-danger btn-sm btn-delete' >"
-                        "<span class='delete'>Deletar</span></button>"
+                    "<button type='button' class='btn btn-danger btn-sm btn-delete' data-toggle='tooltip' "
+                        "data-placement='bottom' title='Deletar Funcionário'>"
+                        "<i class='fas fa-user-slash' width='80px;'></i></button>"
                  "</a>" % str(employee.id)
                  ]
             )

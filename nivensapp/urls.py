@@ -13,6 +13,7 @@ urlpatterns = [
          name='password_reset_complete'),
     path('login/submit', views.login_submit),
     path('list/', views.employee_list, name='employee_list'),
+    path('change-password/', views.change_password, name='change_password'),
     path('api/list_employee/', views.get_employees_list, name='get_list_employees'),
     path('edit/employee/', views.edit_employee, name='edit_employee'),
     path('delete/employee/', views.delete_employee, name='delete_employee'),

@@ -45,7 +45,7 @@ async def ajuda(ctx):
 
 @sync_to_async
 def get_employee(employee):
-    filter = Employee.objects.filter(discord_username__iexact=employee).exists()
+    filter = Employee.objects.filter(discord_username__iexact=employee, active=True).exists()
     if filter:
         employee = Employee.objects.get(discord_username__iexact=employee)
         return employee

@@ -5,19 +5,9 @@
 	width: 400px;
 	height: 475px;
 	border: 1px solid #edeef0;
+	border-radius: 20px;
 	font-weight: 600;
-}
-
-.message {
-	width: 600px;
-	height: 10px;
-	margin-left: 80px;
-	margin-top: 25px;
-	font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-	font-weight: 1000;
-	font-size: 100px;
-	color: #02345e;
-	text-shadow: rgba(60, 64, 67, 0.3) 4px 4px 4px;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 .col {

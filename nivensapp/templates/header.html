@@ -4,11 +4,14 @@
 <meta charset="UTF-8">
 <link rel="icon" href="{% static 'icons/logo-nivens-nbg.png' %}" type="image/icon type">
 <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'jquery/jquery.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
 <link rel="stylesheet" type="text/css" href="{% static 'css/nivens.css' %}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
 <style>
     a {
         color: #034f84;
@@ -25,7 +28,7 @@
 
       img{
  
-        width: 25%;
+        width: 20%;
         display: flex;
         display: -webkit-flex;
        
@@ -33,12 +36,13 @@
 
 </style>
 
-<title>NIVENS</title>
+<title>Nivens - Home</title>
 <nav class="navbar navbar-expand-lg" style="background: #d5f4e6; opacity: 0.8; display: flex;">
-    <a class="navbar-brand" href="#">
-        <img src={% static 'img/logo.png' %} alt="logo">
+    <a class="navbar-brand" href="/list/">
+        <img src="{% static 'icons/logo-nbg-cut.png' %}">
+        <h2 class="logo-title">Nivens</h2>
     </a>
-          
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -52,15 +56,28 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Sobre Nós</a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="https://lingsv.github.io/nivensdocs/">User Guide</a>
             </li>
 
-            {% if request.user and request.user.first_name %}
-                <li class="nav">
-                    <p class="nav-link" style="color: #034f84;"> {{request.user.first_name}} </p>
-                </li>
-            {% endif %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {% if request.user and request.user.first_name %}
+                        Olá, {{request.user.first_name}}
+                    {% else %}
+                        Olá, anônimo
+                    {% endif %}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                  {% if request.user.is_superuser %}
+                    <a class="dropdown-item" href="/admin/"><i class="fas fa-users-cog"></i>    Administrativo</a>
+                  {% endif %}
+                  <a class="dropdown-item" href="/change-password/"><i class="far fa-edit"></i>   Redefinir Senha</a>
+                  <a class="dropdown-item" href="/logout/"><i class="fas fa-sign-out-alt"></i>    Encerrar Sessão</a>
+                </div>
+            </li>
+
         </ul>
     </div>
 </nav>

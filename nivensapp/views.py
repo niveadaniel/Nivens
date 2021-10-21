@@ -1,17 +1,24 @@
 from calendar import monthrange
 from datetime import date, datetime
 from io import BytesIO
-
 import xlsxwriter
+
+from django.contrib.auth import authenticate, login, update_session_auth_hash, logout
+from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm
+from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core import serializers
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_protect
+from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.template.loader import render_to_string
 
+from nivensproject.settings import EMAIL_HOST_USER
 from .choices import MONTHS
 from .models import Department, Employee, PointTime, Situation
 
@@ -66,23 +73,7 @@ def login_submit(request):
 
     return redirect('/login/')
 
-@csrf_protect
-def change_password(request):
-    """Função de troca de senha.
 
-    Args:
-        request (object): Objeto responsável pela requisição para a API.
-
-    Returns:
-        object: Objeto para redenderização em html da requisição.
-    """
-    if request.method == 'POST':
-        kwargs = dict(request.POST)
-        print(kwargs)
-    return render(request, 'change_password.html')
-
-
-@csrf_protect
 def logout_user(request):
     """Função de logout do usuário.
 
@@ -94,6 +85,60 @@ def logout_user(request):
     """
     logout(request)
     return redirect('/login/')
+
+@csrf_protect
+def password_reset_request(request):
+    if request.method == 'POST':
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Pedido de Redefinicao de Senha"
+                    email_template_name = "password_reset_email.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'Nivens',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    message = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, message, EMAIL_HOST_USER, [user.email], fail_silently=False)
+                    except Exception as ex:
+                        return HttpResponse(ex)
+                    return redirect("/password_reset/done/")
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="password_reset.html",
+                  context={"password_reset_form": password_reset_form})
+
+
+@login_required(login_url='/login/')
+@csrf_protect
+def change_password(request):
+    """Função de troca de senha.
+
+    Args:
+        request (object): Objeto responsável pela requisição para a API.
+
+    Returns:
+        object: Objeto para redenderização em html da requisição.
+    """
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Senha alterada com sucesso! Clique em Voltar para retornar a página inicial.')
+            return redirect('change_password')
+    else:
+        form = PasswordChangeForm(request.user)
+    print(form)
+    return render(request, 'change_password.html', {'form': form, 'change_password': True})
 
 
 @login_required(login_url='/login/')
@@ -129,17 +174,19 @@ def create_data_table_employees(employees):
                  employee.department.name,
                  employee.situation.description,
                  "<a href='/edit/employee/?id=%s'>"
-                    "<button type='button' class='btn btn-primary btn-sm' id='' style='padding-right: 5px;'>"
-                 "<span class='edit'>Editar</span></button>"
+                    "<button type='button' class='btn btn-primary btn-sm' data-toggle='tooltip' data-placement='bottom'"
+                        " title='Editar Funcionário' id='edit-list' style='padding-right: 5px;'>"
+                        "<i class='fas fa-user-edit'></i></button>"
                  "</a>" % str(employee.id) +
                  "<a href='/list/point_time/?id=%s'>"
-                    "<button type='button' class='btn btn-dark btn-sm' id=''>"
-
-                 "<span class='edit'>Espelho</span></button>"
+                    "<button type='button' class='btn btn-dark btn-sm' data-toggle='tooltip' data-placement='bottom' "
+                        "title='Espelho'>"
+                        "<i class='far fa-clipboard'></i></button>"
                  "</a>" % str(employee.id) +
                  "<a href='/delete/employee?id=%s' notification-modal='1'>"
-                    "<button type='button' class='btn btn-danger btn-sm btn-delete' >"
-                        "<span class='delete'>Deletar</span></button>"
+                    "<button type='button' class='btn btn-danger btn-sm btn-delete' data-toggle='tooltip' "
+                        "data-placement='bottom' title='Deletar Funcionário'>"
+                        "<i class='fas fa-user-slash' width='80px;'></i></button>"
                  "</a>" % str(employee.id)
                  ]
             )

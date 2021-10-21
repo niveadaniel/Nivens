@@ -5,22 +5,13 @@
 	width: 400px;
 	height: 450px;
 	border: 1px solid #edeef0;
+	border-radius: 20px;
 	font-weight: 600;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 h3 {
     margin-top: 40px;
     margin-left: 35px;
-}
-.message {
-	width: 600px;
-	height: 10px;
-	margin-left: 80px;
-	margin-top: 25px;
-	font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-	font-weight: 1000;
-	font-size: 100px;
-	color: #02345e;
-	text-shadow: rgba(60, 64, 67, 0.3) 4px 4px 4px;
 }
 
 .col {
@@ -51,12 +42,39 @@ h3 {
 	height: 3.0rem;
 }
 
-.footer-text{
+.footer-text {
 	margin-top: 10px;
 	color: #04C4D9;
 	margin-left: 460px;
 }
 
+.reset-request {
+    width: 35%;
+    margin-left: 115px;
+    margin-top: 35px;
+}
+
+.reset-input {
+    width: 100%;
+
+}
+
+.title-text {
+    margin-top: 5px;
+}
+
+.comp-reset {
+    margin-left: 145px;
+    margin-top: 115px;
+}
+
+.reset-div {
+    margin-top: -10px;
+}
+
+.reset-text {
+    font-size: 16px;
+}
 
 .eye {
     float: right;
@@ -65,3 +83,8 @@ h3 {
 .psw {
     margin-top: 20px;
 }
+
+p {
+    color: black;
+}
+

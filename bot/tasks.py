@@ -1,39 +1,47 @@
-import discord
-from discord.ext import commands
-import time
-import random
 import os
+import random
+import time
+from datetime import date, datetime
+
+import discord
 import django
 from asgiref.sync import sync_to_async
+from discord.ext import commands
+from nivensapp.models import Employee, PointTime
+
 # import mysql.connector
 
+# estabelece setup e variável de amabiente
 os.environ['DJANGO_SETTINGS_MODULE'] = 'nivensproject.settings'
 django.setup()
 
-from nivensapp.models import Employee, PointTime
-from datetime import date, datetime
-
+# inicia o cliente do bot
 client = commands.Bot(command_prefix='.')
 
+# instancia as variáveis globais
 global entrada, saida, registro
 
 
 @client.event
+# instancia evento on_ready
 async def on_ready():
     print("Cheguei rapaziada do trampo!")
 
 
 @client.event
+# instancia evento de novo membro no servidor
 async def on_member_join(member):
     print("Bem vindo!")
 
 
 @client.command()
+# instancia evento de ping no servidor
 async def ping(ctx):
     await ctx.send(f"Pong! {round(client.latency * 1000)}ms")
 
 
 @client.command()
+# instancia evento do comando de ajuda
 async def ajuda(ctx):
     await ctx.send("-------------------------------------Bem-vindo!-------------------------------------"
                    "\nAbaixo estão os comandos necessários para bater o ponto da forma correta:\n"
@@ -44,8 +52,10 @@ async def ajuda(ctx):
 
 
 @sync_to_async
+# instancia evento de captura de dados do funcionário
 def get_employee(employee):
-    filter = Employee.objects.filter(discord_username__iexact=employee, active=True).exists()
+    filter = Employee.objects.filter(discord_username__iexact=employee,
+                                     active=True).exists()
     if filter:
         employee = Employee.objects.get(discord_username__iexact=employee)
         return employee
@@ -53,6 +63,7 @@ def get_employee(employee):
 
 
 @sync_to_async
+# instancia evento de captura de dados de ponto do funcionário
 def get_employee_point(employee):
     filter = PointTime.objects.filter(employee=employee, day=date.today())
     if filter:
@@ -61,6 +72,7 @@ def get_employee_point(employee):
 
 
 @sync_to_async
+# instancia evento de gravação dos dados de ponto capturados
 def save_employee_point(employee, period):
     save_point = PointTime.objects.get(employee=employee, day=date.today())
     setattr(save_point, period, datetime.today())
@@ -69,6 +81,7 @@ def save_employee_point(employee, period):
 
 
 @sync_to_async
+# instancia evento de criação de pontos de funcionários
 def create_employee_point(employee):
     save_point = PointTime.objects.create(employee=employee,
                                           day=date.today(),
@@ -77,6 +90,7 @@ def create_employee_point(employee):
 
 
 @client.command()
+# instancia evento de entrar
 async def entrar(ctx):
     funcionario_username = ctx.message.author
     funcionario_nome = funcionario_username.name
@@ -99,6 +113,7 @@ async def entrar(ctx):
 
 
 @client.command()
+# instancia evento almoço
 async def almoco(ctx):
     funcionario_username = ctx.message.author
     funcionario_nome = funcionario_username.name
@@ -122,6 +137,7 @@ async def almoco(ctx):
 
 
 @client.command()
+# instancia final do evento almoço
 async def almocov(ctx):
     funcionario_username = ctx.message.author
     funcionario_nome = funcionario_username.name
@@ -144,6 +160,7 @@ async def almocov(ctx):
 
 
 @client.command()
+# instancia evento saída
 async def saida(ctx):
     funcionario_username = ctx.message.author
     funcionario_nome = funcionario_username.name
@@ -165,7 +182,8 @@ async def saida(ctx):
                        f" não cadastrado no sistema.")
 
 
-@client.command(aliases =['8ball', 'Vidente', 'vidente'])
+@client.command(aliases=['8ball', 'Vidente', 'vidente'])
+# instancia evento 'modo aleatório'
 async def _8ball(ctx, *, pergunta):
     respostas = ['Com certeza!.',
                  'Sem dúvida!',
@@ -185,5 +203,5 @@ async def _8ball(ctx, *, pergunta):
                  'Nunca!']
     await ctx.send(f"Pergunta: {pergunta}\n Resposta: {random.choice(respostas)}")
 
-
+# roda o cliente do bot
 client.run('ODE3OTM0OTYzNDUwMDUyNjI5.YEQvSw.WwCQLCGD7_wh8OI887UuU4NbaI4')

@@ -180,7 +180,7 @@ def create_data_table_employees(employees):
                  "</a>" % str(employee.id) +
                  "<a href='/list/point_time/?id=%s'>"
                     "<button type='button' class='btn btn-dark btn-sm' data-toggle='tooltip' data-placement='bottom' "
-                        "title='Espelho'>"
+                        "title='Espelho de Ponto'>"
                         "<i class='far fa-clipboard'></i></button>"
                  "</a>" % str(employee.id) +
                  "<a href='/delete/employee?id=%s' notification-modal='1'>"

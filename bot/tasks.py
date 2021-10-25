@@ -7,7 +7,9 @@ import discord
 import django
 from asgiref.sync import sync_to_async
 from discord.ext import commands
+
 from nivensapp.models import Employee, PointTime
+from nivensproject import settings
 
 # import mysql.connector
 
@@ -204,4 +206,4 @@ async def _8ball(ctx, *, pergunta):
     await ctx.send(f"Pergunta: {pergunta}\n Resposta: {random.choice(respostas)}")
 
 # roda o cliente do bot
-client.run('ODE3OTM0OTYzNDUwMDUyNjI5.YEQvSw.WwCQLCGD7_wh8OI887UuU4NbaI4')
+client.run(settings.DISCORD_TOKEN)

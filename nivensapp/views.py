@@ -432,35 +432,38 @@ def get_report(request):
                                                   year, month, 1, 0, 0),
                                               start_time__lte=datetime(year, month, days_in_month[1], 0, 0))
         times = []
-        for time in point_time:
-            dic = dict()
-            dic['Funcionario'] = time.employee.name
-            dic['Data'] = time.day.strftime('%d/%m/%Y')
-            dic['Entrada'] = time.start_time.strftime(
-                '%H:%M:%S') if time.start_time else '-'
-            dic['Pausa'] = time.break_time.strftime(
-                '%H:%M:%S') if time.break_time else '-'
-            dic['Retorno'] = time.back_time.strftime(
-                '%H:%M:%S') if time.back_time else '-'
-            dic['Saida'] = time.finish_time.strftime(
-                '%H:%M:%S') if time.finish_time else '-'
-            total_hour = get_total_hour(time)
-            dic['Total'] = 'h'.join(str(total_hour).split(':')[
-                                    :2]) if total_hour else '0h'
-            times.append(dic)
-        keys = dic.keys()
-        output = BytesIO()
-        workbook = xlsxwriter.Workbook(output)
-        worksheet = workbook.add_worksheet()
-        insert_data_excel(times, worksheet, keys)
-        workbook.close()
-        output.seek(0)
-        response = HttpResponse(output,
-                                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        if point_time:
+            for time in point_time:
+                dic = dict()
+                dic['Funcionario'] = time.employee.name
+                dic['Data'] = time.day.strftime('%d/%m/%Y')
+                dic['Entrada'] = time.start_time.strftime(
+                    '%H:%M:%S') if time.start_time else '-'
+                dic['Pausa'] = time.break_time.strftime(
+                    '%H:%M:%S') if time.break_time else '-'
+                dic['Retorno'] = time.back_time.strftime(
+                    '%H:%M:%S') if time.back_time else '-'
+                dic['Saida'] = time.finish_time.strftime(
+                    '%H:%M:%S') if time.finish_time else '-'
+                total_hour = get_total_hour(time)
+                dic['Total'] = 'h'.join(str(total_hour).split(':')[
+                                        :2]) if total_hour else '0h'
+                times.append(dic)
+            keys = dic.keys()
+            output = BytesIO()
+            workbook = xlsxwriter.Workbook(output)
+            worksheet = workbook.add_worksheet()
+            insert_data_excel(times, worksheet, keys)
+            workbook.close()
+            output.seek(0)
+            response = HttpResponse(output,
+                                    content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
-        response['Content-Disposition'] = 'attachment; filename=Relatorio_%s_%s_%s.xlsx' % (
-            point_time[0].employee.name, MONTHS[month-1][1], year)
-        return response
+            response['Content-Disposition'] = 'attachment; filename=Relatorio_%s_%s_%s.xlsx' % (
+                point_time[0].employee.name, MONTHS[month-1][1], year)
+            return response
+        else:
+            return HttpResponseServerError('Não há dados para serem exportados.')
     except Exception as e:
         print(e)
         return HttpResponseServerError('Houve um erro, não foi possível gerar relatório.')

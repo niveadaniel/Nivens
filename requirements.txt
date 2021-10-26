@@ -4,4 +4,7 @@ asgiref~=3.3.1
 celery==5.1.2
 XlsxWriter==1.4.5
 django-crispy-forms==1.13.0
-django-widget-tweaks==1.4.9python-dotenv
+django-widget-tweaks==1.4.9
+python-dotenv
+gunicorn==20.1.0
+

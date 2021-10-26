@@ -3,6 +3,7 @@ import os
 from celery import Celery
 from pathlib import Path
 from dotenv import load_dotenv
+from django.conf import settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
@@ -15,6 +16,8 @@ app = Celery('nivensproject')
 # Configuração do objeto
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.update(BROKER_URL=os.environ['REDIS_URL'])
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
 
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()

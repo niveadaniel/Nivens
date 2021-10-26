@@ -11,7 +11,6 @@ from discord.ext import commands
 from nivensapp.models import Employee, PointTime
 from nivensproject import settings
 
-# import mysql.connector
 
 # estabelece setup e variável de amabiente
 os.environ['DJANGO_SETTINGS_MODULE'] = 'nivensproject.settings'
@@ -175,7 +174,7 @@ async def saida(ctx):
                                f"{point[0].finish_time.strftime('%m/%d/%Y às %H:%M:%S')}")
             else:
                 new_point = await save_employee_point(funcionario_obj, 'finish_time')
-                await ctx.send(f"Ponto batido, retorno almoço: {funcionario_nome}"
+                await ctx.send(f"Ponto batido, saída: {funcionario_nome}"
                                f"\n{new_point.finish_time.strftime('%m/%d/%Y às %H:%M:%S')}")
         else:
             await ctx.send(f"Não foi possível realizar batida de saída.\nEntrada não foi cadastrada.")

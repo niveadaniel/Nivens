@@ -7,4 +7,5 @@ django-crispy-forms==1.13.0
 django-widget-tweaks==1.4.9
 python-dotenv
 gunicorn==20.1.0
+mysqlclient
 

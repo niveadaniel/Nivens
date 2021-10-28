@@ -36,7 +36,7 @@
 
 </style>
 
-<title>Nivens - Home</title>
+<title>Nivens</title>
 <nav class="navbar navbar-expand-lg" style="background: #d5f4e6; opacity: 0.8; display: flex;">
     <a class="navbar-brand" href="/list/">
         <img src="{% static 'icons/logo-nbg-cut.png' %}">
@@ -53,9 +53,9 @@
             <li class="nav-item active">
                <a class="nav-link" href="{% url 'employee_list' %}">Home <span class="sr-only">(current)</span></a>
             </li>
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="#">Sobre Nós</a>-->
-<!--            </li>-->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'get_about_us_page' %}">Sobre Nós</a>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="https://lingsv.github.io/nivensdocs/">User Guide</a>

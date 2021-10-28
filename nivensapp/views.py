@@ -48,6 +48,11 @@ def login_user(request):
     """
     return render(request, 'login.html')
 
+@login_required(login_url='/login/')
+@csrf_protect
+def get_about_us_page(request):
+    return render(request, 'about_us.html')
+
 
 @csrf_protect
 def login_submit(request):

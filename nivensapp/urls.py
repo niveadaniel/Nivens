@@ -20,5 +20,6 @@ urlpatterns = [
     path('edit/employee/submit/', views.save_employee, name='save_employee'),
     path('list/point_time/', views.list_point_time, name='list_point_time'),
     path('api/list_point_time/', views.get_point_time_list, name='get_point_time_list'),
-    path('report/api/', views.get_report, name='get_report')
+    path('report/api/', views.get_report, name='get_report'),
+    path('about-us/', views.get_about_us_page, name='get_about_us_page'),
 ]

@@ -1,0 +1,78 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block main %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fontestextos.css' %}">
+    <script src="{% static 'javascript/formatar.js' %}"></script>
+
+    <script src="https://kit.fontawesome.com/bdf911197a.js" crossorigin="anonymous"></script>
+<!--    Bootstrap CSS-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title> Sobre Nós </title>
+</head>
+<style>
+
+</style>
+<body>
+    <span class="cotainer">
+        <div>
+            <div class="col-xl-12 col-sm-12">
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!-- <div style="padding: 0em 5em"> -->
+                            <div style="padding-top: 2em;">
+                                <p class="subtitulo" id="quemsomos"> Quem somos </p>
+                                <div>
+                                    <img class="col-xl-3 col-sm img-fluid float-right" src="{% static 'icons/logo-nivens-nbg.png' %}">
+                                </div>
+                                <p> 
+                                    O Nivens é um sistema inovador que apoia o desenvolvimento de trabalho home office, com serviços que auxiliam as atividades do dia a dia da empresa sobre seus funcionários. <br><br>
+                                        Missão - Dar total controle para a empresa sobre os horários de seus funcionários, facilitando a supervisão e o desenvolvimento da empresa. <br>
+                                        Visão - Ser o maior sistema de ponto no mercado digital com o crescimento constante de empresas que adotam o home office, reconhecido pelas organizações devido à confiabilidade e rigor na pontualidade. <br>
+                                        Valores - Inovação, desenvolvimento e pontualidade. 
+                                </p>
+                            </div>
+                            
+                            <!--História-->
+                            <div class="subtitulo" style="padding-top: 2em;">
+                                <a id="historia"> História </a>
+                            </div>
+                            <div style="padding-bottom: 2em;">
+                                <div>
+                                    <img class="imgLogo col-xl-3 col-sm img-fluid float-left" src="{% static 'icons/quemsomos.png' %}">
+                                </div>
+                                <p>
+                                    O Nivens é composto por seis integrantes que atuam na área de tecnologia
+                                    da informação, que tiveram como ideia inicial a criação de um sistema 
+                                    de ponto digital através dá plataforma do Discord, com o objetivo de trazer
+                                    para as empresas um controle maior sobre seus funcionários em home office.
+                                    Essa ideia surgiu com o crescimento do trabalho home office, onde cada vez mais
+                                    empresas adotaram esse método de trabalho por conta da pandemia que tivemos
+                                    em 2019 até pouco tempo atras, e muitos decidiram permanecerem em home office
+                                    pelo desempenho que obtiveram, e como forma de estimular esse método de trabalho,
+                                    surgiu o Nivens.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!--Rodapé-->
+
+        </div>
+    </span>
+</body>
+</html>
+
+{% endblock %}

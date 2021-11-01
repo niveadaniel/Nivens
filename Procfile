@@ -1,2 +1,2 @@
 web: gunicorn nivensproject.wsgi
-worker: celery worker --app=tasks.app
+worker: celery -A nivensproject worker -l INFO

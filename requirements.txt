@@ -9,4 +9,5 @@ python-dotenv
 gunicorn==20.1.0
 mysqlclient
 django_heroku
+redis
 

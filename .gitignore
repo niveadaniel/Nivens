@@ -11,3 +11,4 @@ scripts/
 .mypy_cache
 .ipynb_checkpoints
 .editorconfig
+db.sqlite3

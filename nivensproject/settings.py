@@ -144,4 +144,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
 
 django_heroku.settings(locals())
-# del DATABASES['default']['OPTIONS']['sslmode']
+del DATABASES['default']['OPTIONS']['sslmode']

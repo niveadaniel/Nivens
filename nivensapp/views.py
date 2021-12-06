@@ -441,7 +441,7 @@ def get_report(request):
             for time in point_time:
                 dic = dict()
                 dic['Funcionario'] = time.employee.name
-                dic['Data'] = time.day.strftime('%d/%m/%Y')
+                # dic['Data'] = time.day.strftime('%d/%m/%Y')
                 dic['Entrada'] = time.start_time.strftime(
                     '%H:%M:%S') if time.start_time else '-'
                 dic['Pausa'] = time.break_time.strftime(

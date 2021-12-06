@@ -86,7 +86,7 @@ class PointTime(models.Model):
     """
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE,
                                  blank=False, null=False)
-    day = models.DateField(auto_now_add=True, null=False,
+    day = models.DateField(null=False,
                            blank=False, editable=True)
     start_time = models.DateTimeField(null=True, blank=True)
     break_time = models.DateTimeField(null=True, blank=True)

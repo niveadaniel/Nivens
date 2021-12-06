@@ -12,3 +12,4 @@ scripts/
 .ipynb_checkpoints
 .editorconfig
 db.sqlite3
+deploy
